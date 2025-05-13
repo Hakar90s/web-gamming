@@ -87,12 +87,23 @@ def show_answer():
         update_user_progress(user_id, st.session_state.level, st.session_state.score)
         st.rerun()  # Rerun the app to reflect new level and score
 
+def go_back_to_previous_level():
+    """Allow the user to go back to the previous level."""
+    if level > 1:  # Prevent going below level 1
+        st.session_state.level -= 1
+        st.rerun()  # Rerun to show the previous level
+    else:
+        st.warning("You are already at the first level!")
+
 # ------------------ Buttons ------------------ #
 if st.button("Submit Answer"):
     handle_answer_submission()
 
 if st.button("Show Answer"):
     show_answer()
+
+if st.button("Go Back to Previous Level"):
+    go_back_to_previous_level()
 
 # ------------------ Sidebar ------------------ #
 # Display username, score, and current level in the sidebar
