@@ -1,52 +1,52 @@
 level_data = {
     1: {
-        "image_url": "https://images.pexels.com/photos/2092979/pexels-photo-2092979.jpeg",  # 3 apples
-        "question": "How many red apples are visible in the image?",
-        "answer": "3"
+        "image_url": "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg",
+        "question": "What fruit is in the basket?",
+        "answer": "apple"
     },
     2: {
-        "image_url": "https://images.pexels.com/photos/2288483/pexels-photo-2288483.jpeg",  # Elephant
-        "question": "What animal is shown in the image?",
-        "answer": "elephant"
+        "image_url": "https://images.pexels.com/photos/145939/pexels-photo-145939.jpeg",
+        "question": "What animal is sitting on the grass?",
+        "answer": "dog"
     },
     3: {
-        "image_url": "https://images.pexels.com/photos/1194779/pexels-photo-1194779.jpeg",  # Green traffic light
-        "question": "What is the color of the traffic light?",
-        "answer": "green"
+        "image_url": "https://images.pexels.com/photos/210182/pexels-photo-210182.jpeg",
+        "question": "What color is the car in the front?",
+        "answer": "red"
     },
     4: {
-        "image_url": "https://images.pexels.com/photos/4212846/pexels-photo-4212846.jpeg",  # People with umbrellas
-        "question": "How many people are holding umbrellas?",
-        "answer": "2"
+        "image_url": "https://images.pexels.com/photos/1092730/pexels-photo-1092730.jpeg",
+        "question": "How many balloons are in the image?",
+        "answer": "3"
     },
     5: {
-        "image_url": "https://images.pexels.com/photos/5242517/pexels-photo-5242517.jpeg",  # Road sign with number
-        "question": "What number is shown on the sign?",
-        "answer": "60"
+        "image_url": "https://images.pexels.com/photos/159711/pexels-photo-159711.jpeg",
+        "question": "What is the person riding?",
+        "answer": "bicycle"
     },
     6: {
-        "image_url": "https://images.pexels.com/photos/1733116/pexels-photo-1733116.jpeg",  # Yellow car
-        "question": "What color is the car in the front?",
-        "answer": "yellow"
+        "image_url": "https://images.pexels.com/photos/33256/stack-of-books-vintage-books-book-books.jpg",
+        "question": "What object is stacked in the image?",
+        "answer": "books"
     },
     7: {
-        "image_url": "https://images.pexels.com/photos/2097439/pexels-photo-2097439.jpeg",  # Sunflower
-        "question": "Which flower is shown in the image?",
-        "answer": "sunflower"
+        "image_url": "https://images.pexels.com/photos/912050/pexels-photo-912050.jpeg",
+        "question": "What type of food is on the plate?",
+        "answer": "pizza"
     },
     8: {
-        "image_url": "https://images.pexels.com/photos/3706220/pexels-photo-3706220.jpeg",  # Boy holding camera
-        "question": "What is the boy holding?",
-        "answer": "camera"
+        "image_url": "https://images.pexels.com/photos/207983/pexels-photo-207983.jpeg",
+        "question": "What color is the taxi?",
+        "answer": "yellow"
     },
     9: {
-        "image_url": "https://images.pexels.com/photos/1624003/pexels-photo-1624003.jpeg",  # Cat on carpet
-        "question": "What animal is lying on the carpet?",
+        "image_url": "https://images.pexels.com/photos/1261728/pexels-photo-1261728.jpeg",
+        "question": "What animal is lying on the floor?",
         "answer": "cat"
     },
     10: {
-        "image_url": "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg",  # Blue building
-        "question": "What is the main color of the building?",
-        "answer": "blue"
+        "image_url": "https://images.pexels.com/photos/261187/pexels-photo-261187.jpeg",
+        "question": "What sport is being played?",
+        "answer": "basketball"
     }
 }
