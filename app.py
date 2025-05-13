@@ -5,6 +5,7 @@ from handle import (
 )
 from level_data import level_data
 
+# Set up page configuration
 st.set_page_config(page_title="🎮 100-Level Image Game", layout="centered")
 st.title("🎮 100-Level Image Game")
 
@@ -29,6 +30,7 @@ if "user_id" not in st.session_state:
 
         if user_id:
             st.session_state.user_id = user_id
+            st.session_state.username = username
             progress = get_user_progress(user_id)
             if not progress:
                 init_user_progress(user_id)
@@ -37,7 +39,6 @@ if "user_id" not in st.session_state:
             else:
                 st.session_state.level = progress["current_level"]
                 st.session_state.score = progress["score"]
-            st.session_state.username = username  # Store username in session state
             st.rerun()  # Rerun the app to reload with user data
         else:
             st.error("Invalid credentials.")
@@ -46,9 +47,9 @@ if "user_id" not in st.session_state:
 # ------------------ Game State ------------------ #
 # Retrieve user data from session state
 user_id = st.session_state.user_id
+username = st.session_state.username
 level = st.session_state.level
 score = st.session_state.score
-username = st.session_state.username  # Fetch username from session state
 
 logout_button()  # Render log-out button in the sidebar
 
@@ -61,7 +62,13 @@ if not level_info:
 
 # ------------------ Game UI ------------------ #
 st.subheader(f"Level {level}")
-st.image(level_info["image_url"], caption=f"Level {level}", use_container_width=True)
+
+# Load the image properly
+try:
+    st.image(level_info["image_url"], caption=f"Level {level}", use_container_width=True)
+except Exception as e:
+    st.error(f"Error loading image: {e}")
+
 st.write(level_info["question"])
 
 user_answer = st.text_input("Your Answer").strip().lower()
