@@ -1,6 +1,6 @@
 level_data = {
     1: {
-        "image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/rr.PNG",
+        "image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%201.jpg?raw=true",
         "question": "What fruit is in the basket?",
         "answer": "apple"
     },
