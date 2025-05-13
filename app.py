@@ -63,7 +63,10 @@ if not level_info:
 # ------------------ Game UI ------------------ #
 st.subheader(f"Level {level}")
 
-# Load the image properly
+# Directly show the image URL to debug
+st.write(f"Image URL for this level: {level_info['image_url']}")
+
+# Test image display
 try:
     st.image(level_info["image_url"], caption=f"Level {level}", use_container_width=True)
 except Exception as e:
