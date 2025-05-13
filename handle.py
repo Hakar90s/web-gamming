@@ -85,3 +85,20 @@ def update_user_progress(user_id, level, score):
     conn.commit()
     cur.close()
     conn.close()
+
+def register_user(username, password):
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            INSERT INTO users (username, password) VALUES (%s, %s)
+            ON CONFLICT (username) DO NOTHING;
+        """, (username, hash_password(password)))
+        conn.commit()
+        cur.close()
+        conn.close()
+        return True
+    except Exception as e:
+        print("Error in register_user:", e)
+        return False
+
