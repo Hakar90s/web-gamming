@@ -25,4 +25,4 @@ def logout_button():
         del st.session_state['user_id']
         st.session_state.level = 1
         st.session_state.score = 0
-        st.experimental_rerun()  # Redirects to the login page after logout
+        st.rerun()  # Replaces experimental_rerun with st.rerun()
