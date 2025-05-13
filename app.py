@@ -36,6 +36,7 @@ if "user_id" not in st.session_state:
             else:
                 st.session_state.level = progress["current_level"]
                 st.session_state.score = progress["score"]
+            st.session_state.username = username  # Store the username in session state
             st.rerun()
         else:
             st.error("Invalid credentials.")
@@ -45,6 +46,7 @@ if "user_id" not in st.session_state:
 user_id = st.session_state.user_id
 level = st.session_state.level
 score = st.session_state.score
+username = st.session_state.username  # Retrieve username from session state
 
 logout_button()
 
