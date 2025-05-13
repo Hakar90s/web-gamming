@@ -96,6 +96,6 @@ if st.button("Show Answer"):
 
 # ------------------ Sidebar ------------------ #
 # Display username, score, and current level in the sidebar
-st.sidebar.write(f"👤 Username: {username}")
+st.sidebar.write(f"👤 Username: {st.session_state.get('username', 'Guest')}")
 st.sidebar.write(f"⭐ Score: {score}")
 st.sidebar.write(f"🏁 Level: {level}")
