@@ -15,6 +15,7 @@ def logout_button():
             del st.session_state[key]
         st.rerun()
 
+# Check if the user is logged in or not
 if "user_id" not in st.session_state:
     auth_mode = st.selectbox("Login or Sign up", ["Login", "Sign up"])
     username = st.text_input("Username")
@@ -36,19 +37,20 @@ if "user_id" not in st.session_state:
             else:
                 st.session_state.level = progress["current_level"]
                 st.session_state.score = progress["score"]
-            st.session_state.username = username  # Store the username in session state
-            st.rerun()
+            st.session_state.username = username  # Store username in session state
+            st.rerun()  # Rerun the app to reload with user data
         else:
             st.error("Invalid credentials.")
-    st.stop()
+    st.stop()  # Stop execution if user is not logged in yet
 
 # ------------------ Game State ------------------ #
+# Retrieve user data from session state
 user_id = st.session_state.user_id
 level = st.session_state.level
 score = st.session_state.score
-username = st.session_state.username  # Retrieve username from session state
+username = st.session_state.username  # Fetch username from session state
 
-logout_button()
+logout_button()  # Render log-out button in the sidebar
 
 level_info = level_data.get(level)
 
@@ -65,23 +67,25 @@ st.write(level_info["question"])
 user_answer = st.text_input("Your Answer").strip().lower()
 
 def handle_answer_submission():
+    """Handle the submission of the user's answer."""
     if user_answer == level_info["answer"]:
-        st.success("Correct! Moving to next level.")
+        st.success("Correct! Moving to the next level.")
         st.session_state.level += 1
         st.session_state.score += 10
         update_user_progress(user_id, st.session_state.level, st.session_state.score)
-        st.rerun()
+        st.rerun()  # Rerun the app to reflect new level and score
     else:
         st.warning("Wrong answer. Try again!")
 
 def show_answer():
+    """Display the correct answer and give the user the option to proceed to the next level."""
     st.write(f"The correct answer is: **{level_info['answer']}**")
     st.write("Click the button below to proceed to the next level.")
     if st.button("Continue to Next Level"):
         st.session_state.level += 1
         st.session_state.score += 10
         update_user_progress(user_id, st.session_state.level, st.session_state.score)
-        st.rerun()
+        st.rerun()  # Rerun the app to reflect new level and score
 
 # ------------------ Buttons ------------------ #
 if st.button("Submit Answer"):
@@ -91,6 +95,7 @@ if st.button("Show Answer"):
     show_answer()
 
 # ------------------ Sidebar ------------------ #
+# Display username, score, and current level in the sidebar
 st.sidebar.write(f"👤 Username: {username}")
 st.sidebar.write(f"⭐ Score: {score}")
 st.sidebar.write(f"🏁 Level: {level}")
