@@ -30,7 +30,7 @@ if "user_id" not in st.session_state:
             else:
                 st.session_state.level = progress["current_level"]
                 st.session_state.score = progress["score"]
-            st.experimental_rerun()
+            st.rerun()  # Updated to st.rerun()
         else:
             st.error("Invalid credentials.")
     st.stop()
@@ -41,7 +41,7 @@ score = st.session_state.score
 user_id = st.session_state.user_id
 
 st.subheader(f"Level {level}")
-st.image(get_level_image(level), caption=f"Level {level} Image", use_column_width=True)
+st.image(get_level_image(level), caption=f"Level {level} Image", use_container_width=True)  # Updated to use_container_width
 
 # Simulated correct answer check (you should replace this)
 answer = st.text_input("Your Answer").lower()
