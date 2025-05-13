@@ -1,16 +1,16 @@
 level_data = {
     1: {
-        "image_url": "https://images.pexels.com/photos/2092979/pexels-photo-2092979.jpeg",  # Example of 3 apples
+        "image_url": "https://images.pexels.com/photos/2092979/pexels-photo-2092979.jpeg",  # 3 apples
         "question": "How many red apples are visible in the image?",
         "answer": "3"
     },
     2: {
-        "image_url": "https://images.pexels.com/photos/2288483/pexels-photo-2288483.jpeg",  # Example of elephant
+        "image_url": "https://images.pexels.com/photos/2288483/pexels-photo-2288483.jpeg",  # Elephant
         "question": "What animal is shown in the image?",
         "answer": "elephant"
     },
     3: {
-        "image_url": "https://images.pexels.com/photos/1194779/pexels-photo-1194779.jpeg",  # Example of green traffic light
+        "image_url": "https://images.pexels.com/photos/1194779/pexels-photo-1194779.jpeg",  # Green traffic light
         "question": "What is the color of the traffic light?",
         "answer": "green"
     },
