@@ -17,18 +17,17 @@ def logout_button():
 
 if "user_id" not in st.session_state:
     auth_mode = st.selectbox("Login or Sign up", ["Login", "Sign up"])
-    input_username = st.text_input("Username")
-    input_password = st.text_input("Password", type="password")
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
 
     if st.button(auth_mode):
         if auth_mode == "Sign up":
-            user_id = register_user(input_username, input_password)
+            user_id = register_user(username, password)
         else:
-            user_id = login_user(input_username, input_password)
+            user_id = login_user(username, password)
 
         if user_id:
             st.session_state.user_id = user_id
-            st.session_state.username = input_username
             progress = get_user_progress(user_id)
             if not progress:
                 init_user_progress(user_id)
@@ -44,7 +43,6 @@ if "user_id" not in st.session_state:
 
 # ------------------ Game State ------------------ #
 user_id = st.session_state.user_id
-username = st.session_state.username
 level = st.session_state.level
 score = st.session_state.score
 
@@ -64,31 +62,31 @@ st.write(level_info["question"])
 
 user_answer = st.text_input("Your Answer").strip().lower()
 
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    if st.button("⬅️ Previous Level"):
-        if level > 1:
-            st.session_state.level -= 1
-            st.rerun()
-
-with col2:
-    if st.button("Submit"):
-        if user_answer == level_info["answer"]:
-            st.success("Correct! Moving to next level.")
-            st.session_state.level += 1
-            st.session_state.score += 10
-            update_user_progress(user_id, st.session_state.level, st.session_state.score)
-            st.rerun()
-        else:
-            st.warning("Wrong answer. Try again!")
-
-with col3:
-    if st.button("Show Answer and Continue"):
-        st.info(f"The correct answer is: **{level_info['answer']}**")
+def handle_answer_submission():
+    if user_answer == level_info["answer"]:
+        st.success("Correct! Moving to next level.")
         st.session_state.level += 1
+        st.session_state.score += 10
         update_user_progress(user_id, st.session_state.level, st.session_state.score)
         st.rerun()
+    else:
+        st.warning("Wrong answer. Try again!")
+
+def show_answer():
+    st.write(f"The correct answer is: **{level_info['answer']}**")
+    st.write("Click the button below to proceed to the next level.")
+    if st.button("Continue to Next Level"):
+        st.session_state.level += 1
+        st.session_state.score += 10
+        update_user_progress(user_id, st.session_state.level, st.session_state.score)
+        st.rerun()
+
+# ------------------ Buttons ------------------ #
+if st.button("Submit Answer"):
+    handle_answer_submission()
+
+if st.button("Show Answer"):
+    show_answer()
 
 # ------------------ Sidebar ------------------ #
 st.sidebar.write(f"👤 Username: {username}")
