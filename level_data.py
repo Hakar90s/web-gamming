@@ -11,4 +11,11 @@ level_data = {
         "question": "Who won the Ballon d'Or 2014?",
         "answer": "ronaldo"
     }
+
+3: {
+        "image_url": "https:// raw.gubusercontent.com /Hakar90s/web-gamming/main/images/level%202.jpg?raw=true",
+        "answer_image_url": "https://raw.hubusercontent.com/Hakar90s/web-gamming/main/images/level%202%20A.jpg?raw=true",
+        "question": "Who won the Ballon d'Or 2014?",
+        "answer": "ronaldo"
+    }
 }
