@@ -1,15 +1,15 @@
 level_data = {
     1: {
-        "https:// raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%201.jpg?raw=true.png",
-        "answer_image_url": "https:// raw.githubusercontent.com /Hakar90s/web-gamming/main/images/level%201%20A.png?raw=true.png",  # Replace this with the image you want to show after solving
+        "image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%201.jpg?raw=true",
+        "answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%201%20A.png?raw=true",
         "question": "How many red apples do you see?",
         "answer": "3"
     },
     2: {
         "image_url": "https://your-question-image-link.com",
-        "answer_image_url": "https://your-answer-image-link.com",  # Replace this
+        "answer_image_url": "https://your-answer-image-link.com",
         "question": "Which animal is shown in the image?",
         "answer": "elephant"
     },
-    # Continue with more levels...
+    # Add more levels here...
 }
