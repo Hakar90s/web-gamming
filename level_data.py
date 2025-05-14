@@ -6,7 +6,7 @@ level_data = {
         "answer": "apple"
     },
     2: {
-        "image_url": "https://your-image-link.com",
+        "image_url": "https:// raw.githubusercontent.com /Hakar90s/web-gamming/main/images/level%202.jpg?raw=true",
         "answer_image_url": "https://your-answer-image-link.com",
         "question": "Who won the Ballon d'Or 2014?",
         "answer": "ronaldo"
