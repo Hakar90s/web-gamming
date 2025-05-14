@@ -8,7 +8,7 @@ level_data = {
     2: {
         "image_url": "https://your-image-link.com",
         "answer_image_url": "https://your-answer-image-link.com",
-        "question": "Which animal is shown in the image?",
-        "answer": "elephant"
+        "question": "Who won the Ballon d'Or 2014?",
+        "answer": "ronaldo"
     }
 }
