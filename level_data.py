@@ -10,9 +10,9 @@ level_data = {
  "answer": "ronaldo"
 },
     3:  {"image_url": "https:// raw.githubusercontent.com /Hakar90s/web-gamming/main/images/lelvel.jpg?raw=true",
- "answer_image_url": "",
- "question": "",
- "answer": ""
+ "answer_image_url": "https:// raw.githubusercontent.com/Hakar90s/web-gamming/main/images/Add%20a%20subheading.png?raw=true",
+ "question": "guess the final result value in number",
+ "answer": "82"
 },
     4:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     5:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
