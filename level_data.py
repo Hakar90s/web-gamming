@@ -11,8 +11,8 @@ level_data = {
 },
     3:  {"image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%203.jpg?raw=true",
  "answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%203%20A.jpg?raw=true",
- "question": "guess the final result value in number",
- "answer": "82"
+ "question": "choose the right answer",
+ "answer": "b"
 },
     4:  {"image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%204.jpg?raw=true",
  "answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%204%20A.jpg?raw=true",
