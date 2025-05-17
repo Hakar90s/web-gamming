@@ -29,8 +29,16 @@ level_data = {
  "question": "",
  "answer": ""
 },
-    7:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
-    8:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
+    7:  {"image_url": "",
+ "answer_image_url": "",
+ "question": "",
+ "answer": ""
+},
+    8:  {"image_url": "",
+ "answer_image_url": "",
+ "question": "",
+ "answer": ""
+},
     9:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     10: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     11: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
