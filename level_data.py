@@ -9,8 +9,8 @@ level_data = {
  "question": "Who won the Ballon d'Or 2014?",
  "answer": "ronaldo"
 },
-    3:  {"image_url": "https:// raw.githubusercontent.com /Hakar90s/web-gamming/main/images/lelvel.jpg?raw=true",
- "answer_image_url": "https:// raw.githubusercontent.com/Hakar90s/web-gamming/main/images/Add%20a%20subheading.png?raw=true",
+    3:  {"image_url": "https://raw.githubusercontent.com /Hakar90s/web-gamming/main/images/lelvel.jpg?raw=true",
+ "answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/Add%20a%20subheading.png?raw=true",
  "question": "guess the final result value in number",
  "answer": "82"
 },
