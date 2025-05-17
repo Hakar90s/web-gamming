@@ -14,9 +14,21 @@ level_data = {
  "question": "guess the final result value in number",
  "answer": "82"
 },
-    4:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
-    5:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
-    6:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
+    4:  {"image_url": "",
+ "answer_image_url": "",
+ "question": "",
+ "answer": ""
+},
+    5:  {"image_url": "",
+ "answer_image_url": "",
+ "question": "",
+ "answer": ""
+},
+    6:  {"image_url": "",
+ "answer_image_url": "",
+ "question": "",
+ "answer": ""
+},
     7:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     8:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     9:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
