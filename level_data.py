@@ -59,7 +59,11 @@ level_data = {
  "question": "How many months have 28 days?",
  "answer": "c"
 },
-    13: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
+    13: {"image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/img/level%2013.jpg?raw=true",
+ "answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/img/level%2013%20A.png?raw=true",
+ "question": "write the final result only in number",
+ "answer": "82"
+},
     14: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     15: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     16: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
