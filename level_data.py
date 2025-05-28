@@ -54,7 +54,11 @@ level_data = {
  "question": "Which capital city is the highest above sea level?",
  "answer": "a"
 },
-    12: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
+    12: {"image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/img/level%2012.jpg?raw=true", 
+"answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/img/level%2012%20A.jpg?raw=true",
+ "question": "How many months have 28 days?",
+ "answer": "c"
+},
     13: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     14: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     15: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
