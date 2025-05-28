@@ -12,8 +12,7 @@ def handle_answer_submission():
     ans  = st.session_state.user_answer.strip().lower()
     if ans == info["answer"]:
         st.session_state.correct_answer = True
-        st.success("✅ Correct! Showing answer image.")
-        # score only once
+        # award points once
         if not st.session_state.scored_current_level:
             st.session_state.score += 10
             update_user_progress(
@@ -30,7 +29,7 @@ def show_answer_callback():
 
 def continue_to_next_level():
     st.session_state.level += 1
-    # reset flags
+    # reset flags for new level
     st.session_state.correct_answer       = False
     st.session_state.show_answer_now      = False
     st.session_state.scored_current_level = False
@@ -39,7 +38,6 @@ def continue_to_next_level():
         st.session_state.level,
         st.session_state.score
     )
-    st.rerun()
 
 def go_back_to_previous_level():
     lvl = st.session_state.level
@@ -48,23 +46,22 @@ def go_back_to_previous_level():
         st.session_state.correct_answer       = False
         st.session_state.show_answer_now      = False
         st.session_state.scored_current_level = False
-        st.rerun()
     else:
         st.warning("You're already at the first level!")
 
 def render_level():
-    uid   = st.session_state.user_id
-    level = st.session_state.level
+    init_flags()
+    lvl  = st.session_state.level
+    info = level_data.get(lvl)
 
-    info = level_data.get(level)
     if not info:
         st.balloons()
         st.success("🎉 You've completed all 100 levels!")
         st.stop()
 
-    st.subheader(f"Level {level}")
+    st.subheader(f"Level {lvl}")
 
-    # Decide which image to show
+    # pick which image to show
     if st.session_state.correct_answer or st.session_state.show_answer_now:
         img = info.get("answer_image_url", "")
     else:
@@ -76,19 +73,18 @@ def render_level():
         except Exception as e:
             st.error(f"Error loading image: {e}")
     else:
-        st.warning("⚠️ No image provided for this level.")
+        st.warning("⚠️ No image URL provided for this level.")
 
-    # Question
     st.write(info["question"])
 
-    # Text input stored in session
+    # store the user's answer in session state
     st.text_input("Your Answer", key="user_answer")
 
-    # Buttons that fire instantly
+    # these callbacks now fire instantly
     st.button("Submit Answer", on_click=handle_answer_submission)
     st.button("Show Answer",   on_click=show_answer_callback)
 
-    # Navigation
+    # navigation
     c1, c2 = st.columns(2)
     with c1:
         if (st.session_state.correct_answer or st.session_state.show_answer_now):
