@@ -30,9 +30,9 @@ level_data = {
  "answer": "b"
 },
     7:  {"image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%207.jpg?raw=true",
- "answer_image_url": "",
- "question": "",
- "answer": ""
+ "answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%207%207%20A.jpg?raw=true",
+ "question": "What number comes next in the sequence?",
+ "answer": "c"
 },
     8:  {"image_url": "",
  "answer_image_url": "",
