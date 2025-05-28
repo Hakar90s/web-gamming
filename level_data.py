@@ -67,7 +67,7 @@ level_data = {
     14: {"image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/img/level%2014.jpg?raw=true",
  "answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/img/level%2014%20A.jpg?raw=true",
  "question": "write the right answer",
- "answer": "coin" or "a coin"
+ "answer": "coin"
 },
     15: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     16: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
