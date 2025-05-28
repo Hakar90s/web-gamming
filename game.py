@@ -3,7 +3,7 @@ from handle import update_user_progress
 from level_data import level_data
 
 def init_flags():
-    for flag in ("correct_answer","show_answer_now","scored_current_level"):
+    for flag in ("correct_answer", "show_answer_now", "scored_current_level"):
         if flag not in st.session_state:
             st.session_state[flag] = False
 
@@ -12,7 +12,7 @@ def handle_answer_submission():
     ans  = st.session_state.user_answer.strip().lower()
     if ans == info["answer"]:
         st.session_state.correct_answer = True
-        st.success("✅ Correct! Showing the answer image.")
+        st.success("✅ Correct! Showing answer image.")
         if not st.session_state.scored_current_level:
             st.session_state.score += 10
             update_user_progress(
@@ -29,6 +29,7 @@ def show_answer_callback():
 
 def continue_to_next_level():
     st.session_state.level += 1
+    # Reset flags for new level
     st.session_state.correct_answer       = False
     st.session_state.show_answer_now      = False
     st.session_state.scored_current_level = False
@@ -39,14 +40,13 @@ def continue_to_next_level():
     )
 
 def go_back_to_previous_level():
-    lvl = st.session_state.level
-    if lvl > 1:
+    if st.session_state.level > 1:
         st.session_state.level -= 1
         st.session_state.correct_answer       = False
         st.session_state.show_answer_now      = False
         st.session_state.scored_current_level = False
     else:
-        st.warning("You’re already at the first level!")
+        st.warning("You're already at the first level!")
 
 def render_level():
     init_flags()
@@ -60,29 +60,34 @@ def render_level():
 
     st.subheader(f"Level {lvl}")
 
-    # Choose raw URL, then strip whitespace
-    if st.session_state.correct_answer or st.session_state.show_answer_now:
-        raw_url = info.get("answer_image_url", "")
-    else:
-        raw_url = info.get("image_url", "")
+    # Pick the correct URL (question or answer)
+    raw_url = (
+        info.get("answer_image_url", "") 
+        if (st.session_state.correct_answer or st.session_state.show_answer_now)
+        else info.get("image_url", "")
+    )
 
+    # Clean up any stray whitespace
     img_url = raw_url.strip() if isinstance(raw_url, str) else ""
 
+    # Only attempt to load if we have a non‐empty URL
     if img_url:
         try:
             st.image(img_url, use_container_width=True)
         except Exception as e:
             st.error(f"Error loading image: {e}")
-    else:
-        st.warning("⚠️ No image provided for this level.")
+    # <— No more “No image provided” warning here!
 
     st.write(info["question"])
 
+    # Capture user answer
     st.text_input("Your Answer", key="user_answer")
 
+    # Instant‐fire buttons
     st.button("Submit Answer", on_click=handle_answer_submission)
     st.button("Show Answer",   on_click=show_answer_callback)
 
+    # Navigation
     c1, c2 = st.columns(2)
     with c1:
         if (st.session_state.correct_answer or st.session_state.show_answer_now):
