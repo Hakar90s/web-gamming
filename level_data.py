@@ -34,10 +34,10 @@ level_data = {
  "question": "What number comes next in the sequence?",
  "answer": "c"
 },
-    8:  {"image_url": "",
- "answer_image_url": "",
- "question": "",
- "answer": ""
+    8:  {"image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%208.jpg?raw=true",
+ "answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%208%20A.jpg?raw=true",
+ "question": "What number am I?",
+ "answer": "c"
 },
     9:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     10: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
