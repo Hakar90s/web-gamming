@@ -12,6 +12,7 @@ def handle_answer_submission():
     ans  = st.session_state.user_answer.strip().lower()
     if ans == info["answer"]:
         st.session_state.correct_answer = True
+        st.success("✅ Correct! Showing answer image.")
         if not st.session_state.scored_current_level:
             st.session_state.score += 10
             update_user_progress(
@@ -20,7 +21,6 @@ def handle_answer_submission():
                 st.session_state.score
             )
             st.session_state.scored_current_level = True
-        st.success("✅ Correct! Now showing the answer image.")
     else:
         st.warning("❌ Wrong answer. Try again!")
 
@@ -29,6 +29,7 @@ def show_answer_callback():
 
 def continue_to_next_level():
     st.session_state.level += 1
+    # Reset flags for the new level
     st.session_state.correct_answer       = False
     st.session_state.show_answer_now      = False
     st.session_state.scored_current_level = False
@@ -60,32 +61,28 @@ def render_level():
 
     st.subheader(f"Level {lvl}")
 
-    # Pick which URL to show
+    # Choose which image to show
     if st.session_state.correct_answer or st.session_state.show_answer_now:
-        raw_url = info.get("answer_image_url", "")
+        img = info.get("answer_image_url", "")
     else:
-        raw_url = info.get("image_url", "")
+        img = info.get("image_url", "")
 
-    # Strip whitespace and show for debugging
-    img_url = raw_url.strip() if isinstance(raw_url, str) else ""
-    st.write(f"⚙️ Image URL: `{img_url}`")
-
-    # Only attempt to load if it starts with http
-    if img_url.lower().startswith("http"):
+    # Display image if URL is provided
+    if img:
         try:
-            st.image(img_url, use_container_width=True)
+            st.image(img, use_container_width=True)
         except Exception as e:
             st.error(f"Error loading image: {e}")
     else:
-        st.warning("⚠️ No valid image URL provided for this level.")
+        st.warning("⚠️ No image provided for this level.")
 
-    # Question
+    # Question prompt
     st.write(info["question"])
 
-    # Capture the user's answer
+    # Capture user answer
     st.text_input("Your Answer", key="user_answer")
 
-    # Buttons
+    # Instant buttons
     st.button("Submit Answer", on_click=handle_answer_submission)
     st.button("Show Answer",   on_click=show_answer_callback)
 
