@@ -25,9 +25,9 @@ level_data = {
  "answer": "c"
 },
     6:  {"image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%206.jpg?raw=true",
- "answer_image_url": "",
- "question": "",
- "answer": ""
+ "answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%206%20A.jpg?raw=true",
+ "question": "How is Sarah related to Daniel?",
+ "answer": "b"
 },
     7:  {"image_url": "",
  "answer_image_url": "",
