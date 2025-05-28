@@ -39,7 +39,11 @@ level_data = {
  "question": "What number am I?",
  "answer": "c"
 },
-    9:  {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
+    9:  {"image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%209.jpg?raw=true",
+ "answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%209%20A.jpg?raw=true",
+ "question": "what will happen when the ice melts?",
+ "answer": "b"
+},
     10: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     11: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
     12: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
