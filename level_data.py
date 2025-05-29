@@ -73,4 +73,4 @@ level_data = {
  "answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/img/level%2015%20A.jpg?raw=true",
  "question": "Only write the right number",
  "answer": "11"
-},
+}
