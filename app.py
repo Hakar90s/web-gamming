@@ -10,7 +10,7 @@ TOTAL_LEVELS = len(level_data)
 
 # — Page setup —
 st.set_page_config(page_title="🎮 15-Level Image Game", layout="centered")
-st.title("🎮 15-Level Image Game")
+st.title("🎮 15-Level Prime Game")
 
 # — Auth form (single click) —
 if "user_id" not in st.session_state:
