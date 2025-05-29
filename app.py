@@ -9,7 +9,7 @@ from level_data import level_data
 st.set_page_config(page_title="🎮 100-Level Image Game", layout="centered")
 st.title("🎮 100-Level Image Game")
 
-# — Authentication helpers —
+# — Auth helpers —
 def logout():
     if st.sidebar.button("🚪 Log out"):
         for k in list(st.session_state.keys()):
@@ -18,13 +18,13 @@ def logout():
 
 def restart_game():
     if st.sidebar.button("🔄 Restart Game"):
-        # Reset everything
         st.session_state.level = 1
         st.session_state.score = 0
         st.session_state.scored_levels = set()
         st.session_state.show_answer_remaining = 3
         st.session_state.correct_answer = False
         st.session_state.show_answer_now = False
+        st.session_state.max_unlocked_level = 1
         update_user_progress(st.session_state.user_id, 1, 0)
         st.rerun()
 
@@ -32,11 +32,11 @@ def jump_to_level():
     target = st.session_state.jump_level
     if 1 <= target <= st.session_state.max_unlocked_level:
         st.session_state.level = target
-        st.session_state.correct_answer  = False
+        st.session_state.correct_answer = False
         st.session_state.show_answer_now = False
         st.rerun()
 
-# — Login / Signup flow —
+# — Login / Signup —
 if "user_id" not in st.session_state:
     mode = st.selectbox("Login or Sign up", ["Login", "Sign up"])
     user = st.text_input("Username")
@@ -47,8 +47,8 @@ if "user_id" not in st.session_state:
         else:
             uid = login_user(user, pwd)
         if uid:
-            st.session_state.user_id   = uid
-            st.session_state.username  = user
+            st.session_state.user_id = uid
+            st.session_state.username = user
             prog = get_user_progress(uid)
             if not prog:
                 init_user_progress(uid)
@@ -57,28 +57,31 @@ if "user_id" not in st.session_state:
             else:
                 st.session_state.level = prog["current_level"]
                 st.session_state.score = prog["score"]
-            # Initialize our game state
-            st.session_state.scored_levels        = set()
-            st.session_state.show_answer_remaining= 3
-            st.session_state.correct_answer       = False
-            st.session_state.show_answer_now      = False
-            st.session_state.max_unlocked_level   = st.session_state.level
+            # initialize game state
+            st.session_state.scored_levels         = set()
+            st.session_state.show_answer_remaining = 3
+            st.session_state.correct_answer        = False
+            st.session_state.show_answer_now       = False
+            st.session_state.max_unlocked_level    = st.session_state.level
             st.rerun()
         else:
             st.error("Invalid credentials.")
     st.stop()
 
-# — Game state vars —
+# — Game state —
 uid   = st.session_state.user_id
 user  = st.session_state.username
 lvl   = st.session_state.level
 score = st.session_state.score
 
-# Sidebar controls
+# ensure max_unlocked_level is always set
+if "max_unlocked_level" not in st.session_state:
+    st.session_state.max_unlocked_level = lvl
+
+# — Sidebar controls —
 logout()
 restart_game()
 
-# Jump‐to‐level dropdown
 st.sidebar.markdown("### Jump to Level")
 st.sidebar.selectbox(
     "Select level:",
@@ -87,20 +90,19 @@ st.sidebar.selectbox(
     on_change=jump_to_level
 )
 
-# Show user info
 st.sidebar.markdown(f"👤 **{user}**")
 st.sidebar.markdown(f"⭐ **Score:** {score}")
 st.sidebar.markdown(f"🏁 **Current:** Level {lvl}")
-st.sidebar.markdown(f"🔍 **Show-answer left:** {st.session_state.show_answer_remaining}")
+st.sidebar.markdown(f"🔍 **Show‐Answer Left:** {st.session_state.show_answer_remaining}")
 
-# — Load current level data —
+# — Load level data —
 info = level_data.get(lvl)
 if not info:
     st.balloons()
-    st.success("🎉 You've beaten all 100 levels!")
+    st.success("🎉 You've completed all 100 levels!")
     st.stop()
 
-# — Decide which image to show —
+# — Display image —
 if st.session_state.correct_answer or st.session_state.show_answer_now:
     img_url = info.get("answer_image_url", "").strip()
 else:
@@ -115,21 +117,18 @@ if img_url:
 st.subheader(f"Level {lvl}")
 st.write(info["question"])
 
-# — Capture answer —
+# — Capture user answer —
 st.text_input("Your Answer", key="user_answer")
 
-# — Handlers — 
+# — Handlers —
 def submit_answer():
     ans = st.session_state.user_answer.strip().lower()
-    # normalize valid answers
     valid = info["answer"]
     if isinstance(valid, str):
         valid = [valid]
     valid = [v.strip().lower() for v in valid]
-
     if ans in valid:
         st.session_state.correct_answer = True
-        # award points only once per level
         if lvl not in st.session_state.scored_levels:
             st.session_state.score += 10
             st.session_state.scored_levels.add(lvl)
@@ -147,19 +146,26 @@ def show_answer():
     else:
         st.warning("🚫 No show-answer attempts left!")
 
-def continue_level():
+def continue_next():
     st.session_state.level += 1
     st.session_state.correct_answer  = False
     st.session_state.show_answer_now = False
 
-# — Buttons — 
+def prev_level():
+    if st.session_state.level > 1:
+        st.session_state.level -= 1
+        st.session_state.correct_answer  = False
+        st.session_state.show_answer_now = False
+    else:
+        st.warning("You're already at level 1.")
+
+# — Buttons —
 st.button("Submit Answer", on_click=submit_answer)
-st.button("Show Answer",    on_click=show_answer, disabled=(st.session_state.show_answer_remaining==0))
+st.button("Show Answer", on_click=show_answer, disabled=(st.session_state.show_answer_remaining==0))
 
-cols = st.columns(2)
-with cols[0]:
-    if (st.session_state.correct_answer or st.session_state.show_answer_now):
-        st.button("Continue to Next Level", on_click=continue_level)
-with cols[1]:
-    st.button("⬅️ Previous Level", on_click=lambda: st.session_state.__setitem__("level", max(1, lvl-1)))
-
+c1, c2 = st.columns(2)
+with c1:
+    if st.session_state.correct_answer or st.session_state.show_answer_now:
+        st.button("Continue to Next Level", on_click=continue_next)
+with c2:
+    st.button("⬅️ Previous Level", on_click=prev_level)
