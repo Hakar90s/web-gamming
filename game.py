@@ -2,81 +2,93 @@ import streamlit as st
 from handle import update_user_progress
 from level_data import level_data
 
+TOTAL_LEVELS = len(level_data)  # should be 15
+
 def init_flags():
-    """Ensure per-level flags exist in session state."""
+    """Initialize per‐level flags in session state."""
     for flag in ("correct_answer", "show_answer_now", "scored_current_level"):
         if flag not in st.session_state:
             st.session_state[flag] = False
 
 def handle_answer_submission():
-    """Check user answer against one or more valid answers."""
-    info = level_data[st.session_state.level]
+    """Check the user's answer against one or more valid answers."""
+    lvl = st.session_state.level
+    info = level_data[lvl]
     user_ans = st.session_state.user_answer.strip().lower()
 
-    # Support a single string or a list of valid answers
-    valid_answers = info["answer"]
-    if isinstance(valid_answers, str):
-        valid_answers = [valid_answers]
-    valid_answers = [ans.strip().lower() for ans in valid_answers]
+    # Normalize valid answers to a list
+    valid = info["answer"]
+    if isinstance(valid, str):
+        valid = [valid]
+    valid = [v.strip().lower() for v in valid]
 
-    if user_ans in valid_answers:
+    if user_ans in valid:
         st.session_state.correct_answer = True
-        st.success("✅ Correct! Showing answer image.")
-        if not st.session_state.scored_current_level:
+        # Award points only once per level
+        if lvl not in st.session_state.scored_levels:
             st.session_state.score += 10
+            st.session_state.scored_levels.add(lvl)
             update_user_progress(
                 st.session_state.user_id,
-                st.session_state.level,
+                lvl,
                 st.session_state.score
             )
-            st.session_state.scored_current_level = True
+        # Unlock next level if this was the max reached
+        if lvl == st.session_state.max_unlocked_level and lvl < TOTAL_LEVELS:
+            st.session_state.max_unlocked_level += 1
     else:
         st.warning("❌ Wrong answer. Try again!")
 
 def show_answer_callback():
-    """Reveal the answer image without scoring."""
-    st.session_state.show_answer_now = True
+    """Reveal the answer image, consuming one of the three uses."""
+    if st.session_state.show_answer_remaining > 0:
+        st.session_state.show_answer_now      = True
+        st.session_state.show_answer_remaining -= 1
+    else:
+        st.warning("🚫 No show-answer attempts left!")
 
-def continue_to_next_level():
-    """Advance to the next level and reset flags."""
+def continue_next():
+    """Advance to the next level."""
     st.session_state.level += 1
-    st.session_state.correct_answer       = False
-    st.session_state.show_answer_now      = False
-    st.session_state.scored_current_level = False
-    update_user_progress(
-        st.session_state.user_id,
-        st.session_state.level,
-        st.session_state.score
-    )
+    # Unlock if needed
+    if st.session_state.level > st.session_state.max_unlocked_level:
+        st.session_state.max_unlocked_level = st.session_state.level
+    # Reset flags
+    st.session_state.correct_answer  = False
+    st.session_state.show_answer_now = False
 
-def go_back_to_previous_level():
-    """Return to the previous level and reset flags."""
+def prev_level():
+    """Go back to the previous level."""
     if st.session_state.level > 1:
         st.session_state.level -= 1
-        st.session_state.correct_answer       = False
-        st.session_state.show_answer_now      = False
-        st.session_state.scored_current_level = False
+        st.session_state.correct_answer  = False
+        st.session_state.show_answer_now = False
     else:
-        st.warning("You're already at the first level!")
+        st.warning("🚫 You're already at level 1.")
 
 def render_level():
-    """Render the current level's image, question, and buttons."""
+    """Render either the current level or the end‐of‐game message."""
     init_flags()
-    lvl  = st.session_state.level
-    info = level_data.get(lvl)
+    lvl = st.session_state.level
 
-    if not info:
+    # End‐of‐game: if level beyond last, congratulate
+    if lvl > TOTAL_LEVELS or lvl not in level_data:
         st.balloons()
-        st.success("🎉 You've completed all 100 levels!")
-        st.stop()
+        st.success(
+            f"🎉 Congratulations, {st.session_state.username}!  \n\n"
+            f"You’ve completed all {TOTAL_LEVELS} levels  \n\n"
+            f"Your final score is **{st.session_state.score}**!"
+        )
+        return
 
+    info = level_data[lvl]
     st.subheader(f"Level {lvl}")
 
-    # Choose which image to display
+    # Pick which image to show
     if st.session_state.correct_answer or st.session_state.show_answer_now:
-        img_url = info.get("answer_image_url", "").strip()
+        img_url = info["answer_image_url"].strip()
     else:
-        img_url = info.get("image_url", "").strip()
+        img_url = info["image_url"].strip()
 
     if img_url:
         try:
@@ -87,14 +99,18 @@ def render_level():
     st.write(info["question"])
     st.text_input("Your Answer", key="user_answer")
 
-    # Instant-click buttons
+    # Buttons
     st.button("Submit Answer", on_click=handle_answer_submission)
-    st.button("Show Answer",   on_click=show_answer_callback)
+    st.button(
+        "Show Answer",
+        on_click=show_answer_callback,
+        disabled=(st.session_state.show_answer_remaining == 0)
+    )
 
-    # Navigation buttons
-    col1, col2 = st.columns(2)
-    with col1:
+    # Navigation
+    c1, c2 = st.columns(2)
+    with c1:
         if st.session_state.correct_answer or st.session_state.show_answer_now:
-            st.button("Continue to Next Level", on_click=continue_to_next_level)
-    with col2:
-        st.button("⬅️ Previous Level", on_click=go_back_to_previous_level)
+            st.button("Continue to Next Level", on_click=continue_next)
+    with c2:
+        st.button("⬅️ Previous Level", on_click=prev_level)
