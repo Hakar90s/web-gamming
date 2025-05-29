@@ -6,50 +6,32 @@ from handle import (
 )
 from level_data import level_data
 
-# Total levels is automatically the number of entries in level_data (should be 15)
+# Total levels (should be 15)
 TOTAL_LEVELS = len(level_data)
 
 # — Page setup —
 st.set_page_config(page_title="🎮 15-Level Image Game", layout="centered")
 st.title("🎮 15-Level Image Game")
 
-# — Helper functions —
-def logout():
-    if st.sidebar.button("🚪 Log out"):
-        for k in list(st.session_state.keys()):
-            del st.session_state[k]
-
-def restart_game():
-    if st.sidebar.button("🔄 Restart Game"):
-        st.session_state.level                 = 1
-        st.session_state.score                 = 0
-        st.session_state.scored_levels         = set()
-        st.session_state.show_answer_remaining = 3
-        st.session_state.correct_answer        = False
-        st.session_state.show_answer_now       = False
-        st.session_state.max_unlocked_level    = 1
-        update_user_progress(st.session_state.user_id, 1, 0)
-
-def jump_to_level():
-    lvl = st.session_state.jump_level
-    if 1 <= lvl <= st.session_state.max_unlocked_level:
-        st.session_state.level           = lvl
-        st.session_state.correct_answer  = False
-        st.session_state.show_answer_now = False
-
-# — Authentication flow —
+# — Authentication — #
 if "user_id" not in st.session_state:
-    mode = st.selectbox("Login or Sign up", ["Login", "Sign up"])
-    user = st.text_input("Username")
-    pwd  = st.text_input("Password", type="password")
-    if st.button(mode):
+    # Login / Signup form
+    with st.form("auth_form"):
+        mode = st.selectbox("Login or Sign up", ["Login", "Sign up"])
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        submitted = st.form_submit_button(mode)
+    if submitted:
         if mode == "Sign up":
-            uid = register_user(user, pwd)
+            uid = register_user(username, password)
         else:
-            uid = login_user(user, pwd)
+            uid = login_user(username, password)
+
         if uid:
+            # Initialize session state
             st.session_state.user_id = uid
-            st.session_state.username = user
+            st.session_state.username = username
+
             prog = get_user_progress(uid)
             if not prog:
                 init_user_progress(uid)
@@ -58,47 +40,72 @@ if "user_id" not in st.session_state:
             else:
                 st.session_state.level = prog["current_level"]
                 st.session_state.score = prog["score"]
-            # initialize game flags
-            st.session_state.scored_levels         = set()
+
+            # Game-specific state
+            st.session_state.scored_levels = set()
             st.session_state.show_answer_remaining = 3
-            st.session_state.correct_answer        = False
-            st.session_state.show_answer_now       = False
-            st.session_state.max_unlocked_level    = st.session_state.level
+            st.session_state.correct_answer = False
+            st.session_state.show_answer_now = False
+            st.session_state.max_unlocked_level = st.session_state.level
+
+            st.experimental_rerun()
         else:
             st.error("Invalid credentials.")
     st.stop()
 
-# — Game state retrieval —
-uid   = st.session_state.user_id
-user  = st.session_state.username
-lvl   = st.session_state.level
-score = st.session_state.score
+# — Sidebar controls — #
+def logout_callback():
+    for k in list(st.session_state.keys()):
+        del st.session_state[k]
 
-# ensure max_unlocked_level exists
-if "max_unlocked_level" not in st.session_state:
-    st.session_state.max_unlocked_level = lvl
+def restart_callback():
+    st.session_state.level = 1
+    st.session_state.score = 0
+    st.session_state.scored_levels = set()
+    st.session_state.show_answer_remaining = 3
+    st.session_state.correct_answer = False
+    st.session_state.show_answer_now = False
+    st.session_state.max_unlocked_level = 1
+    update_user_progress(st.session_state.user_id, 1, 0)
 
-# — Sidebar controls —
-logout()
-restart_game()
+def jump_callback():
+    lvl = st.session_state.jump_level
+    if 1 <= lvl <= st.session_state.max_unlocked_level:
+        st.session_state.level = lvl
+        st.session_state.correct_answer = False
+        st.session_state.show_answer_now = False
+
+# Render sidebar buttons
+st.sidebar.button("🚪 Log out", on_click=logout_callback)
+st.sidebar.button("🔄 Restart Game", on_click=restart_callback)
 
 st.sidebar.markdown("### Jump to Level")
 st.sidebar.selectbox(
     "Select level:",
-    options=list(range(1, st.session_state.max_unlocked_level + 1)),
+    options=list(range(1, st.session_state.get("max_unlocked_level", 1) + 1)),
     key="jump_level",
-    on_change=jump_to_level
+    on_change=jump_callback
 )
 
+# User info
+user  = st.session_state.username
+lvl   = st.session_state.level
+score = st.session_state.score
 st.sidebar.markdown(f"👤 **{user}**")
 st.sidebar.markdown(f"⭐ **Score:** {score}")
-st.sidebar.markdown(f"🏁 **Current Level:** {lvl}")
+st.sidebar.markdown(f"🏁 **Current:** Level {lvl}")
 st.sidebar.markdown(f"🔍 **Show-Answer Left:** {st.session_state.show_answer_remaining}")
 
-# — Load current level data —
+# Ensure max_unlocked_level exists
+if "max_unlocked_level" not in st.session_state:
+    st.session_state.max_unlocked_level = lvl
+
+# — Game logic — #
+
+# Fetch current level data
 info = level_data.get(lvl)
 
-# — End-of-Game —
+# End of game?
 if lvl > TOTAL_LEVELS or info is None:
     st.balloons()
     st.success(
@@ -108,7 +115,7 @@ if lvl > TOTAL_LEVELS or info is None:
     )
     st.stop()
 
-# — Display question image or answer image —
+# Show question or answer image
 if st.session_state.correct_answer or st.session_state.show_answer_now:
     img_url = info["answer_image_url"].strip()
 else:
@@ -123,11 +130,11 @@ if img_url:
 st.subheader(f"Level {lvl}")
 st.write(info["question"])
 
-# — Capture user answer —
+# Capture user answer
 st.text_input("Your Answer", key="user_answer")
 
-# — Handlers — 
-def submit_answer():
+# Handlers
+def submit_callback():
     ans = st.session_state.user_answer.strip().lower()
     valid = info["answer"]
     if isinstance(valid, str):
@@ -136,52 +143,50 @@ def submit_answer():
 
     if ans in valid:
         st.session_state.correct_answer = True
-        # Score only once per level
+        # score once
         if lvl not in st.session_state.scored_levels:
             st.session_state.score += 10
             st.session_state.scored_levels.add(lvl)
-            update_user_progress(uid, lvl, st.session_state.score)
-        # Unlock next level if at the top
+            update_user_progress(st.session_state.user_id, lvl, st.session_state.score)
+        # unlock next
         if lvl == st.session_state.max_unlocked_level and lvl < TOTAL_LEVELS:
             st.session_state.max_unlocked_level += 1
     else:
         st.warning("❌ Wrong answer. Try again!")
 
-def show_answer():
+def show_answer_callback():
     if st.session_state.show_answer_remaining > 0:
-        st.session_state.show_answer_now       = True
+        st.session_state.show_answer_now = True
         st.session_state.show_answer_remaining -= 1
     else:
         st.warning("🚫 No show-answer attempts left!")
 
-def continue_next():
+def continue_callback():
     st.session_state.level += 1
-    # Unlock if needed
     if st.session_state.level > st.session_state.max_unlocked_level:
         st.session_state.max_unlocked_level = st.session_state.level
-    # Reset local flags
-    st.session_state.correct_answer  = False
+    st.session_state.correct_answer = False
     st.session_state.show_answer_now = False
 
-def prev_level():
+def previous_callback():
     if st.session_state.level > 1:
         st.session_state.level -= 1
-        st.session_state.correct_answer  = False
+        st.session_state.correct_answer = False
         st.session_state.show_answer_now = False
     else:
-        st.warning("🚫 Already at Level 1.")
+        st.warning("🚫 You’re already at Level 1.")
 
-# — Buttons (single-click callbacks) —
-st.button("Submit Answer", on_click=submit_answer)
+# Buttons (single-click)
+st.button("Submit Answer", on_click=submit_callback)
 st.button(
     "Show Answer",
-    on_click=show_answer,
+    on_click=show_answer_callback,
     disabled=(st.session_state.show_answer_remaining == 0)
 )
 
 c1, c2 = st.columns(2)
 with c1:
     if st.session_state.correct_answer or st.session_state.show_answer_now:
-        st.button("Continue to Next Level", on_click=continue_next)
+        st.button("Continue to Next Level", on_click=continue_callback)
 with c2:
-    st.button("⬅️ Previous Level", on_click=prev_level)
+    st.button("⬅️ Previous Level", on_click=previous_callback)
