@@ -74,9 +74,3 @@ level_data = {
  "question": "Only write the right number",
  "answer": "11"
 },
-    16: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
-    17: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
-    18: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
-    19: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
-    20: {"image_url": "", "answer_image_url": "", "question": "", "answer": ""},
-}
