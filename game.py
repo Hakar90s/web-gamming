@@ -3,14 +3,23 @@ from handle import update_user_progress
 from level_data import level_data
 
 def init_flags():
+    """Ensure per-level flags exist in session state."""
     for flag in ("correct_answer", "show_answer_now", "scored_current_level"):
         if flag not in st.session_state:
             st.session_state[flag] = False
 
 def handle_answer_submission():
+    """Check user answer against one or more valid answers."""
     info = level_data[st.session_state.level]
-    ans  = st.session_state.user_answer.strip().lower()
-    if ans == info["answer"]:
+    user_ans = st.session_state.user_answer.strip().lower()
+
+    # Support a single string or a list of valid answers
+    valid_answers = info["answer"]
+    if isinstance(valid_answers, str):
+        valid_answers = [valid_answers]
+    valid_answers = [ans.strip().lower() for ans in valid_answers]
+
+    if user_ans in valid_answers:
         st.session_state.correct_answer = True
         st.success("✅ Correct! Showing answer image.")
         if not st.session_state.scored_current_level:
@@ -25,11 +34,12 @@ def handle_answer_submission():
         st.warning("❌ Wrong answer. Try again!")
 
 def show_answer_callback():
+    """Reveal the answer image without scoring."""
     st.session_state.show_answer_now = True
 
 def continue_to_next_level():
+    """Advance to the next level and reset flags."""
     st.session_state.level += 1
-    # Reset flags for new level
     st.session_state.correct_answer       = False
     st.session_state.show_answer_now      = False
     st.session_state.scored_current_level = False
@@ -40,6 +50,7 @@ def continue_to_next_level():
     )
 
 def go_back_to_previous_level():
+    """Return to the previous level and reset flags."""
     if st.session_state.level > 1:
         st.session_state.level -= 1
         st.session_state.correct_answer       = False
@@ -49,6 +60,7 @@ def go_back_to_previous_level():
         st.warning("You're already at the first level!")
 
 def render_level():
+    """Render the current level's image, question, and buttons."""
     init_flags()
     lvl  = st.session_state.level
     info = level_data.get(lvl)
@@ -60,37 +72,29 @@ def render_level():
 
     st.subheader(f"Level {lvl}")
 
-    # Pick the correct URL (question or answer)
-    raw_url = (
-        info.get("answer_image_url", "") 
-        if (st.session_state.correct_answer or st.session_state.show_answer_now)
-        else info.get("image_url", "")
-    )
+    # Choose which image to display
+    if st.session_state.correct_answer or st.session_state.show_answer_now:
+        img_url = info.get("answer_image_url", "").strip()
+    else:
+        img_url = info.get("image_url", "").strip()
 
-    # Clean up any stray whitespace
-    img_url = raw_url.strip() if isinstance(raw_url, str) else ""
-
-    # Only attempt to load if we have a non‐empty URL
     if img_url:
         try:
             st.image(img_url, use_container_width=True)
         except Exception as e:
             st.error(f"Error loading image: {e}")
-    # <— No more “No image provided” warning here!
 
     st.write(info["question"])
-
-    # Capture user answer
     st.text_input("Your Answer", key="user_answer")
 
-    # Instant‐fire buttons
+    # Instant-click buttons
     st.button("Submit Answer", on_click=handle_answer_submission)
     st.button("Show Answer",   on_click=show_answer_callback)
 
-    # Navigation
-    c1, c2 = st.columns(2)
-    with c1:
-        if (st.session_state.correct_answer or st.session_state.show_answer_now):
+    # Navigation buttons
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.session_state.correct_answer or st.session_state.show_answer_now:
             st.button("Continue to Next Level", on_click=continue_to_next_level)
-    with c2:
+    with col2:
         st.button("⬅️ Previous Level", on_click=go_back_to_previous_level)
