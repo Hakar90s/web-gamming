@@ -37,11 +37,13 @@ level_data = {
         "question": "How is Sarah related to Daniel?",
         "answer": "b"
     },
-    7: {
+       7: {
         "image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%207.jpg?raw=true",
         "answer_image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%207%20A.jpg?raw=true",
         "question": "What number comes next in the sequence?",
         "answer": "c"
+    },
+
     },
     8: {
         "image_url": "https://raw.githubusercontent.com/Hakar90s/web-gamming/main/images/level%208.jpg?raw=true",
